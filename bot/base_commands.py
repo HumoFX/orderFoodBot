@@ -16,7 +16,7 @@ def register(bot, user, update):
                                text=constants.register,
                                to_menu=constants.home)
         return bot.sendMessage(update.message.chat_id,
-                               text=constants.register_success,
+                               text=constants.register_succeed,
                                reply_markup=markups.home_markup)
 
     if user.phone_number is None:
@@ -30,13 +30,13 @@ def register(bot, user, update):
         return None
 
 
-def help_me(bot, update):
-    bot.sendMessage(update.message.chat_id, text='Call: 911')
-
-
-def sticker(bot, update):
-    bot.sendSticker(update.message.chat_id, sticker=update.message.sticker)
-
-
-def error(bot, update, errors):
-    logger.warning('Update "%s" caused error "%s"' % (update, errors))
+# def help_me(bot, update):
+#     bot.sendMessage(update.message.chat_id, text='Call: 911')
+#
+#
+# def sticker(bot, update):
+#     bot.sendSticker(update.message.chat_id, sticker=update.message.sticker)
+#
+#
+# def error(bot, update, errors):
+#     logger.warning('Update "%s" caused error "%s"' % (update, errors))

@@ -1,17 +1,32 @@
+import json
+import textwrap
 from django.db.models import Sum, F, Q
-
+import datetime
 from bot import markups, constants
 from bot.models import Command, Feedback
-from product.models import Order, Product, CartItem, Category
+from product.models import Order, Product, CartItem, Category, AdminGroup, TelegramChat
 
 
-def command_logging(user, message_id, text, from_menu=None, current_menu=None, to_menu=None):
-    Command.objects.create(user=user,
-                           message_id=message_id,
-                           text=text,
-                           from_menu=from_menu,
-                           current_menu=current_menu,
-                           to_menu=to_menu)
+def command_logging(user, message_id, text, from_menu=None, current_menu=None, to_menu=None,
+                    category_id=None, update=False):
+    if update:
+        Command.objects.filter(message_id=message_id,
+                               user=user).update(
+            text=text,
+            from_menu=from_menu,
+            current_menu=current_menu,
+            to_menu=to_menu,
+            offset=offset,
+            category_id=category_id,
+            product=product)
+    else:
+        Command.objects.create(user=user,
+                               message_id=message_id,
+                               text=text,
+                               from_menu=from_menu,
+                               current_menu=current_menu,
+                               to_menu=to_menu,
+                               category_id=category_id)
 
 
 class Controller:
@@ -23,9 +38,7 @@ class Controller:
         self.last_command = last_command
 
     def get_lang(self):
-        if self.user.language == markups.languages[1][1]:
-            return 'en'
-        elif self.user.language == markups.languages[1][0]:
+        if self.user.language == markups.languages[0][1]:
             return 'ru'
         else:
             return 'uz'
@@ -65,7 +78,7 @@ class Controller:
         cart_items = self.cart.all()
         if not cart_items.exists():
             self.bot.sendMessage(self.update.message.chat_id,
-                                 text=constants.messages[self.get_lang()][constants.empty_cart_msg],
+                                 text=constants.messages[self.get_lang()][constants.empty_cart],
                                  reply_markup=markups.home_markup(self.get_lang()))
             command_logging(user=self.user,
                             message_id=self.update.message.message_id,
@@ -96,13 +109,25 @@ class Controller:
                             message_id=self.update.message.message_id,
                             text=self.update.message.text,
                             from_menu=constants.home,
-                            current_menu=constants.finish_order,
+                            current_menu=constants.proceed_to_order,
                             to_menu=constants.home)
+
+    # create proceed order to get location
+    def proceed_order(self):
+        self.bot.sendMessage(self.update.message.chat_id,
+                             text=constants.messages[self.get_lang()][constants.location],
+                             reply_markup=markups.location_markup(self.get_lang()))
+        command_logging(user=self.user,
+                        message_id=self.update.message.message_id,
+                        text=self.update.message.text,
+                        from_menu=constants.home,
+                        current_menu=constants.location,
+                        to_menu=constants.home)
 
     def order_history(self):
         orders_history = Order.objects.filter(user=self.user)
         if orders_history.count() == 0:
-            text = constants.messages[self.get_lang()][constants.no_orders_yet_msg]
+            text = constants.messages[self.get_lang()][constants.no_orders_yet]
             self.bot.sendMessage(self.update.message.chat_id,
                                  text=text)
             command_logging(user=self.user,
@@ -116,10 +141,10 @@ class Controller:
             updated_at = orders_history.values_list('updated', flat=True)
             zipped = zip(statuses, created_at, updated_at)
             order_str = '{}:\n№.| {} \t | \t {} \t | \t {}\n'.format(
-                constants.messages[self.get_lang()][constants.your_orders_msg],
-                constants.messages[self.get_lang()][constants.status_msg],
-                constants.messages[self.get_lang()][constants.ordered_msg],
-                constants.messages[self.get_lang()][constants.delivered_msg],
+                constants.messages[self.get_lang()][constants.your_orders],
+                constants.messages[self.get_lang()][constants.status],
+                constants.messages[self.get_lang()][constants.ordered],
+                constants.messages[self.get_lang()][constants.delivered],
             )
             counter = 1
             for i, j, k in zipped:
@@ -140,7 +165,7 @@ class Controller:
             self.user.language = self.update.message.text
             self.user.save()
 
-            text = constants.messages[self.get_lang()][constants.lang_select_msg]
+            text = constants.messages[self.get_lang()][constants.lang_select]
 
             self.bot.sendMessage(self.update.message.chat_id,
                                  text=text,
@@ -165,7 +190,7 @@ class Controller:
         if self.last_command.current_menu == constants.feedback:
             Feedback.objects.create(user=self.user,
                                     text=self.update.message.text)
-            text = constants.messages[self.get_lang()][constants.feedback_succeed_msg]
+            text = constants.messages[self.get_lang()][constants.feedback_succeed]
             self.bot.sendMessage(self.update.message.chat_id,
                                  text=text,
                                  reply_markup=markups.home_markup(self.get_lang()))
@@ -176,7 +201,7 @@ class Controller:
                             to_menu=constants.home)
 
         elif self.last_command.from_menu == constants.home:
-            text = constants.messages[self.get_lang()][constants.feedback_send_msg]
+            text = constants.messages[self.get_lang()][constants.feedback_send]
             self.bot.sendMessage(self.update.message.chat_id,
                                  text=text,
                                  reply_markup=markups.back_markup(self.get_lang()))
@@ -189,7 +214,7 @@ class Controller:
 
     def go_home(self):
         self.bot.sendMessage(self.update.message.chat_id,
-                             text=constants.messages[self.get_lang()][constants.welcome_msg],
+                             text=constants.messages[self.get_lang()][constants.welcome],
                              reply_markup=markups.home_markup(self.get_lang()))
         command_logging(user=self.user,
                         message_id=self.update.message.message_id,
@@ -229,7 +254,7 @@ class Controller:
 
         quantity = int(self.update.message.text)
 
-        if product and 0 < quantity < 9:
+        if product and 0 < quantity <= 9:
             if (product.id,) in self.cart.values_list('product_id'):
                 item = self.cart.get(product_id=product.id)
                 item.quantity += quantity
@@ -241,7 +266,7 @@ class Controller:
                                         text='Incorrect quantity {}'.format(
                                             self.update.message.text),
                                         reply_markup=markups.categories_markup(self.get_lang()))
-        text = constants.messages[self.get_lang()][constants.added_to_card_msg].format(
+        text = constants.messages[self.get_lang()][constants.added_to_card].format(
             self.update.message.text,
             self.last_command.text,
         )
@@ -266,17 +291,20 @@ class Controller:
             Q(name_en=self.update.message.text) |
             Q(name_ru=self.update.message.text)
         )
-        markup = markups.product_list(category.id, self.get_lang())
-        text = constants.messages[self.get_lang()][constants.choose_type_msg]
-        self.bot.sendMessage(self.update.message.chat_id,
-                             text=text,
-                             reply_markup=markup)
+        query = Q(category_id=category.id, active_date=datetime.date.today())
+        product = Product.objects.filter(query).last()
+        markup = markups.pieces_markup(self.get_lang())
+        text = f"*{product.name}*\n\n{product.description}\n{product.price} сум \n{product.active_date}"
+        new_message = self.bot.sendPhoto(chat_id=self.update.message.chat_id,
+                                         photo=str(product.photo_id),
+                                         caption=text, parse_mode='Markdown', reply_markup=markup)
         command_logging(user=self.user,
-                        message_id=self.update.message.message_id,
-                        text=self.update.message.text,
+                        message_id=new_message.message_id,
+                        text=product.name,
                         from_menu=constants.category,
                         current_menu=constants.product,
-                        to_menu=constants.pieces)
+                        to_menu=constants.add_to_cart,
+                        category_id=category.id)
 
     def pieces_select(self):
         self.bot.sendMessage(self.update.message.chat_id,
@@ -289,16 +317,135 @@ class Controller:
                         current_menu=constants.pieces,
                         to_menu=constants.add_to_cart)
 
-    def finish_order(self):
-        order = Order(user=self.user)
-        order.save()
-        order.cart.set(self.cart)
-        self.cart.delete()
+    def proceed_order(self):
         self.bot.sendMessage(self.update.message.chat_id,
-                             text=constants.messages[self.get_lang()][constants.finished_message],
-                             reply_markup=markups.home_markup(self.get_lang()))
+                             text='Enter your phone number',
+                             reply_markup=markups.categories_markup(self.get_lang()))
         command_logging(user=self.user,
                         message_id=self.update.message.message_id,
                         text=self.update.message.text,
-                        from_menu=constants.finish_order,
-                        to_menu=constants.home)
+                        from_menu=constants.home,
+                        current_menu=constants.location,
+                        to_menu=constants.phone_number)
+
+    # create location handler with location markup
+    def location(self):
+        self.bot.sendMessage(self.update.message.chat_id,
+                             text=constants.messages[self.get_lang()][constants.location],
+                             reply_markup=markups.location_markup(self.get_lang()))
+        command_logging(user=self.user,
+                        message_id=self.update.message.message_id,
+                        text=self.update.message.text,
+                        from_menu=constants.home,
+                        current_menu=constants.location,
+                        to_menu=constants.checkout)
+
+    # create checkout to confirm order
+    def checkout(self):
+        order = Order.objects.create(
+            user=self.user,
+            location=self.update.message.location.to_dict(),
+        )
+        order.cart.set(self.user.cart.filter(active=True))
+        order.save()
+        self.cart.all().update(active=False)
+        self.bot.sendMessage(self.update.message.chat_id,
+                             text=constants.messages[self.get_lang()][constants.payment_method],
+                             reply_markup=markups.payment_markup(self.get_lang()))
+        command_logging(user=self.user,
+                        message_id=self.update.message.message_id,
+                        text=self.update.message.text,
+                        from_menu=constants.home,
+                        current_menu=constants.checkout,
+                        to_menu=constants.payment_method)
+
+    # create confirm order handler
+    def confirm_order(self):
+        if self.update.message.text == constants.messages[self.get_lang()][constants.confirm_order]:
+            self.bot.sendMessage(self.update.message.chat_id,
+                                 text=constants.messages[self.get_lang()][constants.order_confirmed],
+                                 reply_markup=markups.categories_markup(self.get_lang()))
+            command_logging(user=self.user,
+                            message_id=self.update.message.message_id,
+                            text=self.update.message.text,
+                            from_menu=constants.home,
+                            current_menu=constants.confirm_order,
+                            to_menu=constants.categories)
+        else:
+            self.bot.sendMessage(self.update.message.chat_id,
+                                 text=constants.messages[self.get_lang()][constants.order_not_confirmed],
+                                 reply_markup=markups.categories_markup(self.get_lang()))
+            command_logging(user=self.user,
+                            message_id=self.update.message.message_id,
+                            text=self.update.message.text,
+                            from_menu=constants.home,
+                            current_menu=constants.confirm_order,
+                            to_menu=constants.categories)
+
+    def payment_method(self):
+        if self.update.message.text == constants.messages[self.get_lang()][constants.card_payment]:
+            payment = 1
+        else:
+            payment = 0
+
+        order = Order.objects.filter(user=self.user, status=0, active=True).first()
+        order.payment_type = payment
+        order.save()
+        text = textwrap.dedent(order.representate['text_' + self.get_lang()])
+        if order.payment_type == 1:
+            text += f'\n*{constants.messages[self.get_lang()][constants.card_for_payment]}*'
+        self.bot.sendMessage(self.update.message.chat_id,
+                             text=text,
+                             parse_mode='Markdown',
+                             reply_markup=markups.checkout_markup(self.get_lang()))
+        command_logging(user=self.user,
+                        message_id=self.update.message.message_id,
+                        text=self.update.message.text,
+                        from_menu=constants.checkout,
+                        current_menu=constants.payment_method,
+                        to_menu=constants.finish_order)
+
+    def finish_order(self):
+        if self.update.message.text == constants.messages[self.get_lang()][constants.confirm_order]:
+            group = AdminGroup.objects.last()
+            self.bot.sendMessage(chat_id=self.update.message.chat_id,
+                                 text=constants.messages[self.get_lang()][constants.finished_message],
+                                 reply_markup=markups.home_markup(self.get_lang()))
+            order = Order.objects.filter(user=self.user, status=0, active=True).first()
+            order.status = 1
+            order.save()
+            self.bot.sendLocation(chat_id=group.chat_id.telegram_id,
+                                  longitude=order.location['longitude'],
+                                  latitude=order.location['latitude']),
+            self.bot.sendMessage(chat_id=group.chat_id.telegram_id,
+                                 text=textwrap.dedent(order.representate['text_ru']),
+                                 parse_mode='Markdown',
+                                 reply_markup=markups.order_status_inline_markup(self.get_lang(), order.status,
+                                                                                 order.id))
+
+            command_logging(user=self.user,
+                            message_id=self.update.message.message_id,
+                            text=self.update.message.text,
+                            from_menu=constants.finish_order,
+                            to_menu=constants.home)
+
+    # handler for changes status of order in admin panel with callback_query from inline_keyboard
+    def change_status(self):
+        order_id, action = self.update.callback_query.data.split(':')
+        order = Order.objects.get(id=int(order_id))
+        order.status = int(action)
+        order.save()
+        text = constants.admin_text[action]
+        user_text = constants.user_status[action + '_' + self.get_lang()]
+        self.bot.answerCallbackQuery(callback_query_id=self.update.callback_query.id,
+                                     text=text,
+                                     show_alert=True)
+        self.bot.editMessageText(message_id=self.update.callback_query.message.message_id,
+                                 chat_id=self.update.callback_query.message.chat_id,
+                                 text=textwrap.dedent(order.representate['text_ru']),
+                                 parse_mode='Markdown',
+                                 reply_markup=markups.order_status_inline_markup(self.get_lang(), order.status,
+                                                                                 order_id))
+        self.bot.sendMessage(chat_id=order.user.telegram_id,
+                             text=user_text,
+                             parse_mode='Markdown')
