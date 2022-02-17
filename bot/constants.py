@@ -24,7 +24,7 @@ back = 'back'
 make_order_menu = '🛒 Make order'
 cart_menu = '🛒 Cart'
 my_orders_menu = '🛍 My Orders'
-language_menu = '🇺🇿 🇷🇺 '
+language_menu = '🇺🇿 🇷🇺'
 feedback_menu = '✍️ Feedback'
 back_menu = 'Back'
 finish_order_menu = 'Finish order'
@@ -45,6 +45,7 @@ status = 'Status'
 ordered = 'Ordered'
 delivered = 'Delivered'
 choose_type = 'Choose type'
+choose_lang = "Выберите язык"
 added_to_card = '{} pieces {} added to cart'
 finished_message = 'Finished'
 proceed_to_order = 'Proceed to order'
@@ -103,6 +104,7 @@ messages = {
     'uz': {
         welcome: 'Xush kelibsiz!',
         empty_cart: "Savatchangiz bo'sh",
+        choose_lang: 'Tilni tanlang',
         lang_select: "Til o'zgardi",
         feedback_succeed: "Fikr va mulohazalaringiz uchun rahmat!",
         feedback_send: "Quyida matn kiriting va junating",
@@ -117,7 +119,7 @@ messages = {
         make_order_menu: '🛒 Buyurtma berish',
         cart_menu: '🛒 Savatcha',
         my_orders_menu: '🛍 Mening buyurtmalarim',
-        language_menu: '🇺🇿 🇷🇺 ',
+        language_menu: '🇺🇿 🇷🇺',
         feedback_menu: '✍️ Taklif bildirish',
         back_menu: 'Orqaga',
         proceed_to_order: 'Buyurtma berish',
@@ -143,6 +145,7 @@ messages = {
     'ru': {
         welcome: 'Добро пожаловать!',
         empty_cart: "Ваша корзина пуста",
+        choose_lang: 'Выберите язык',
         lang_select: "Язык изменен",
         feedback_succeed: 'Спасибо за ваш отзыв!',
         feedback_send: "Введите текст ниже и отправьте.",

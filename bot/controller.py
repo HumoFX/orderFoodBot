@@ -178,7 +178,7 @@ class Controller:
 
         elif self.last_command.from_menu == constants.home:
             self.bot.sendMessage(self.update.message.chat_id,
-                                 text='Choose your language:',
+                                 text=constants.messages[self.get_lang()][constants.choose_lang],
                                  reply_markup=markups.languages_markup)
             command_logging(user=self.user,
                             message_id=self.update.message.message_id,
