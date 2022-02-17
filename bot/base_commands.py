@@ -11,15 +11,15 @@ def register(bot, user, update):
         user.phone_number = update.message.contact.phone_number
         user.is_registered = True
         user.save()
-        Command.objects.create(user=user,
-                               message_id=update.message.message_id,
-                               text=constants.register,
-                               to_menu=constants.home)
-        return bot.sendMessage(update.message.chat_id,
-                               text=constants.register_succeed,
-                               reply_markup=markups.home_markup)
+        bot.sendMessage(chat_id=user.telegram_id,
+                        text=constants.register_succeed,
+                        reply_markup=markups.home_markup('ru'))
+        return Command.objects.create(user=user,
+                                      message_id=update.message.message_id,
+                                      text=constants.register,
+                                      to_menu=constants.home)
 
-    if user.phone_number is None:
+    elif user.phone_number is None:
         bot.sendMessage(update.message.chat_id,
                         text=constants.ask_contact,
                         reply_markup=markups.register_markup)
@@ -27,8 +27,6 @@ def register(bot, user, update):
                                message_id=update.message.message_id,
                                text=update.message.text,
                                to_menu=constants.home)
-        return None
-
 
 # def help_me(bot, update):
 #     bot.sendMessage(update.message.chat_id, text='Call: 911')

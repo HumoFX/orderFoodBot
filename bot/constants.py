@@ -28,12 +28,12 @@ language_menu = '🇺🇿 🇷🇺 '
 feedback_menu = '✍️ Feedback'
 back_menu = 'Back'
 finish_order_menu = 'Finish order'
-send_contact_menu = "Send contact"
+send_contact_menu = "Поделится контактом"
 
 # for messages
-register_succeed = "Thank you for registration!"
-ask_contact = "Click 'send contact' to register."
-welcome = 'Welcome'
+register_succeed = "Спасибо за регистрацию! Теперь вы можете пользоваться ботом."
+ask_contact = "Отправьте ваш номер телефона"
+welcome = 'Добро пожаловать!'
 empty_cart = "Your cart is empty"
 lang_select = "Language has changed"
 feedback_succeed = 'Thanks for your feedback!'
@@ -139,38 +139,6 @@ messages = {
         card_payment: 'Karta',
         send_order: 'Buyurtma yuborish',
         card_for_payment: 'Karta orqali to\'lov uchun 9860260101234567 raqamiga Payme yoki Click ilova yordamida xaridni amalga oshirishing',
-    },
-    'en': {
-        welcome: 'Welcome!',
-        empty_cart: "Your cart is empty",
-        lang_select: "Language has changed",
-        feedback_succeed: 'Thanks for your feedback!',
-        feedback_send: 'Enter text below and send.',
-        in_your_cart: "In your cart:",
-        your_orders: "Your orders:",
-        status: 'Status',
-        ordered: 'Ordered',
-        delivered: 'Delivered',
-        choose_type: 'Choose type:',
-        added_to_card: '{} pieces {} added to cart',
-        no_orders_yet: "You didn't order anything yet.",
-        make_order_menu: '🛒 Make order',
-        cart_menu: '🛒 Cart',
-        my_orders_menu: '🛍 My Orders',
-        language_menu: '🇺🇿 🇷🇺 🇺🇸 Language',
-        feedback_menu: '✍️ Feedback',
-        back_menu: 'Back',
-        proceed_to_order: 'Order request',
-        send_location: 'Send location',
-        finish_order_menu: 'Finish order',
-        finished_message: 'Success!',
-        checkout: 'Checkout',
-        clear_cart: 'Clear cart',
-        confirm_order: 'Confirm',
-        not_confirm_order: 'Not confirm',
-        location: 'Location',
-        card_payment: 'Card',
-        cash_payment: 'Cash',
     },
     'ru': {
         welcome: 'Добро пожаловать!',

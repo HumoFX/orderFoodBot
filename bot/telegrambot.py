@@ -2,7 +2,7 @@ from django_telegrambot.apps import DjangoTelegramBot
 from telegram.ext import MessageHandler, Filters, CallbackContext, CallbackQueryHandler
 from telegram import Update
 from bot import constants
-from bot.base_commands import register, sticker
+from bot.base_commands import register
 from bot.controller import Controller
 from bot.models import TelegramUser, Command
 from product.models import TelegramChat
@@ -31,9 +31,9 @@ def bot_control(update: Update, context: CallbackContext):
     except:
         cart = None
     if not user.is_registered:
-        return register(context.bot, user, update)
+        register(context.bot, user, update)
 
-    if update.message.text == '/start':
+    elif update.message.text == '/start':
         Controller(context.bot, update, user).start()
 
     try:
@@ -128,4 +128,4 @@ def main():
 
     dp.add_handler(CallbackQueryHandler(admin_control))
 
-    dp.add_handler(MessageHandler(Filters.sticker, sticker))
+    # dp.add_handler(MessageHandler(Filters.sticker, sticker))
