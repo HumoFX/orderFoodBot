@@ -22,7 +22,7 @@ def register(bot, user, update):
         bot.sendMessage(chat_id=user.telegram_id,
                         text=constants.register_succeed,
                         reply_markup=markups.home_markup('ru'))
-        return Controller(context.bot, update, user).start()
+        return Controller(bot, update, user).start()
     elif update.message.text and is_phone_number(update.message.text):
         user.phone_number = update.message.text
         user.is_registered = True
@@ -30,7 +30,7 @@ def register(bot, user, update):
         bot.sendMessage(chat_id=user.telegram_id,
                         text=constants.register_succeed,
                         reply_markup=markups.home_markup('ru'))
-        return Controller(context.bot, update, user).start()
+        return Controller(bot, update, user).start()
     elif user.phone_number is None:
         bot.sendMessage(update.message.chat_id,
                         text=constants.ask_contact,
