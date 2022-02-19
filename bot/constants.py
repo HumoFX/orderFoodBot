@@ -82,32 +82,31 @@ send_order_message = 'Your order has been sent'
 order_done = 'Order done'
 order_done_message = 'Your order has been done'
 
-admin_text = {'2': 'Заказ принят!',
-              '3': 'Заказ готов и отправлен!',
-              '4': 'Заказ выполнен!',
-              '5': 'Заказ отменен!'
+admin_text = {'2': 'Заказ принят ✅',
+              '3': 'Заказ готов и отправлен 🚚',
+              '4': 'Заказ выполнен ✅',
+              '5': 'Заказ отменен ❌'
               }
 user_status = {
-    '2_ru': 'Заказ принят!',
-    '3_ru': 'Заказ готов и отправлен!',
-    '4_ru': 'Приятного аппетита!',
-    '5_ru': 'Заказ отменен!',
+    '2_ru': 'Заказ принят ✅',
+    '3_ru': 'Заказ готов и отправлен 🚚',
+    '4_ru': 'Приятного аппетита ☺️',
+    '5_ru': 'Заказ отменен ❌',
 
-    '2_uz': 'Buyurtma qabul qilindi!',
-    '3_uz': 'Buyurtma tayyor va yetkazib berish uchun jo\'natildi!',
-    '4_uz': 'Yoqimli ishtaxa!',
-    '5_uz': 'Buyurtma bekor qilindi!'
+    '2_uz': 'Buyurtma qabul qilindi ✅',
+    '3_uz': 'Buyurtma tayyor va yetkazib berish uchun jo\'natildi 🚚',
+    '4_uz': 'Yoqimli ishtaxa ☺️',
+    '5_uz': 'Buyurtma bekor qilindi ❌'
 
 }
 
 messages = {
     'uz': {
-        welcome: 'Xush kelibsiz!',
-        empty_cart: "Savatchangiz bo'sh",
-        choose_lang: 'Tilni tanlang',
-        lang_select: "Til o'zgardi",
-        feedback_succeed: "Fikr va mulohazalaringiz uchun rahmat!",
-        feedback_send: "Quyida matn kiriting va junating",
+        welcome: 'Xush kelibsiz 🤗',
+        empty_cart: "Savatchangiz bo'sh 😧",
+        lang_select: "Til o'zgardi ✅",
+        feedback_succeed: "Fikr va mulohazalaringiz uchun rahmat 💭",
+        feedback_send: "Quyida matn kiriting va jo\'nating",
         in_your_cart: "Savatchada:",
         your_orders: "Buyurtmalaringiz:",
         status: 'Holati',
@@ -137,15 +136,14 @@ messages = {
 {}-та {}
 Умумий толов(доставкасиз): {} узс""",
         payment_method: 'To\'lov usulini tanlang',
-        cash_payment: 'Naqd',
-        card_payment: 'Karta',
+        cash_payment: 'Naqd 💵',
+        card_payment: 'Karta 💳',
         send_order: 'Buyurtma yuborish',
-        card_for_payment: 'Karta orqali to\'lov uchun 9860260101234567 raqamiga Payme yoki Click ilova yordamida xaridni amalga oshirishing',
+        card_for_payment: 'Karta orqali to\'lov uchun 8600 1402 8764 0982 raqamiga Payme yoki Click ilova yordamida xaridni amalga oshirishing',
     },
     'ru': {
         welcome: 'Добро пожаловать!',
         empty_cart: "Ваша корзина пуста",
-        choose_lang: 'Выберите язык',
         lang_select: "Язык изменен",
         feedback_succeed: 'Спасибо за ваш отзыв!',
         feedback_send: "Введите текст ниже и отправьте.",
@@ -181,10 +179,10 @@ messages = {
         accept_order: "Принять",
         decline_order: "Отклонить",
         payment_method: "Выберите способ оплаты",
-        cash_payment: "Наличные",
-        card_payment: "На карту",
+        cash_payment: "Наличные 💵",
+        card_payment: "На карту 💳",
         send_order: "Отправить заказ",
-        card_for_payment: "Оплатите заказ с помощью приложения Payme или Click, переводя деньги на 9860260101234567",
+        card_for_payment: "Оплатите заказ с помощью приложения Payme или Click, переводя деньги на 8600 1402 8764 0982",
 
     },
 
