@@ -32,80 +32,80 @@ def bot_control(update: Update, context: CallbackContext):
         cart = None
     if not user.is_registered:
         register(context.bot, user, update)
-
-    elif update.message.text == '/start':
-        Controller(context.bot, update, user).start()
-
-    try:
-        last_command = Command.objects.filter(user=user).last()
-    except Command.DoesNotExist:
-        last_command = None
-
-    if update.message.text == 'Home':
-        Controller(context.bot, update, user).go_home()
-
-    elif update.message.text in ["Orqaga", 'Back', "Назад", "orqaga", 'back', "назад"]:
-        Controller(context.bot, update, user).go_home()
-
-    elif last_command.to_menu == constants.language:
-        Controller(context.bot, update, user, cart, last_command).language_select()
-
-    elif last_command.to_menu == constants.category:
-        Controller(context.bot, update, user, cart, last_command).category_select()
-
-    elif last_command.to_menu == constants.product:
-        Controller(context.bot, update, user, cart, last_command).product_select()
-
-    elif last_command.to_menu == constants.pieces:
-        Controller(context.bot, update, user, cart, last_command).pieces_select()
-
-    elif last_command.to_menu == constants.add_to_cart:
-        Controller(context.bot, update, user, cart, last_command).add_to_card()
-
-    elif last_command.to_menu == constants.cart:
-        Controller(context.bot, update, user, cart, last_command).cart_select()
-
-    elif last_command.current_menu == constants.proceed_to_order:
-        Controller(context.bot, update, user, cart, last_command).location()
-
-    elif last_command.to_menu == constants.remove_from_cart:
-        Controller(context.bot, update, user, cart, last_command).remove_from_cart()
-
-    elif last_command.to_menu == constants.checkout:
-        Controller(context.bot, update, user, cart, last_command).checkout()
-
-    elif last_command.to_menu == constants.location:
-        Controller(context.bot, update, user, cart, last_command).location()
-
-    elif last_command.to_menu == constants.payment_method:
-        Controller(context.bot, update, user, cart, last_command).payment_method()
-
-    elif last_command.to_menu == constants.confirm_order:
-        Controller(context.bot, update, user, cart, last_command).confirm_order()
-
-    elif last_command.to_menu == constants.order_succeed:
-        Controller(context.bot, update, user, cart, last_command).order_succeed()
-
-    elif last_command.to_menu == constants.order_failed:
-        Controller(context.bot, update, user, cart, last_command).order_fail()
-
-    elif last_command.to_menu == constants.order_canceled:
-        Controller(context.bot, update, user, cart, last_command).order_cancel()
-
-    elif last_command.to_menu == constants.payment_method:
-        Controller(context.bot, update, user, cart, last_command).finish_order()
-
-    elif last_command.to_menu == constants.finish_order:
-        Controller(context.bot, update, user, cart, last_command).finish_order()
-
-    elif last_command.current_menu == constants.feedback:
-        Controller(context.bot, update, user, cart, last_command).feedback()
-
-    elif last_command.to_menu == constants.home:
-        Controller(context.bot, update, user, cart, last_command).home_control()
-
     else:
-        context.bot.sendMessage(update.message.chat_id, text='???')
+        if update.message.text == '/start':
+            Controller(context.bot, update, user).start()
+
+        try:
+            last_command = Command.objects.filter(user=user).last()
+        except Command.DoesNotExist:
+            last_command = None
+
+        if update.message.text == 'Home':
+            Controller(context.bot, update, user).go_home()
+
+        elif update.message.text in ["Orqaga", 'Back', "Назад", "orqaga", 'back', "назад"]:
+            Controller(context.bot, update, user).go_home()
+
+        elif last_command.to_menu == constants.language:
+            Controller(context.bot, update, user, cart, last_command).language_select()
+
+        elif last_command.to_menu == constants.category:
+            Controller(context.bot, update, user, cart, last_command).category_select()
+
+        elif last_command.to_menu == constants.product:
+            Controller(context.bot, update, user, cart, last_command).product_select()
+
+        elif last_command.to_menu == constants.pieces:
+            Controller(context.bot, update, user, cart, last_command).pieces_select()
+
+        elif last_command.to_menu == constants.add_to_cart:
+            Controller(context.bot, update, user, cart, last_command).add_to_card()
+
+        elif last_command.to_menu == constants.cart:
+            Controller(context.bot, update, user, cart, last_command).cart_select()
+
+        elif last_command.current_menu == constants.proceed_to_order:
+            Controller(context.bot, update, user, cart, last_command).location()
+
+        elif last_command.to_menu == constants.remove_from_cart:
+            Controller(context.bot, update, user, cart, last_command).remove_from_cart()
+
+        elif last_command.to_menu == constants.checkout:
+            Controller(context.bot, update, user, cart, last_command).checkout()
+
+        elif last_command.to_menu == constants.location:
+            Controller(context.bot, update, user, cart, last_command).location()
+
+        elif last_command.to_menu == constants.payment_method:
+            Controller(context.bot, update, user, cart, last_command).payment_method()
+
+        elif last_command.to_menu == constants.confirm_order:
+            Controller(context.bot, update, user, cart, last_command).confirm_order()
+
+        elif last_command.to_menu == constants.order_succeed:
+            Controller(context.bot, update, user, cart, last_command).order_succeed()
+
+        elif last_command.to_menu == constants.order_failed:
+            Controller(context.bot, update, user, cart, last_command).order_fail()
+
+        elif last_command.to_menu == constants.order_canceled:
+            Controller(context.bot, update, user, cart, last_command).order_cancel()
+
+        elif last_command.to_menu == constants.payment_method:
+            Controller(context.bot, update, user, cart, last_command).finish_order()
+
+        elif last_command.to_menu == constants.finish_order:
+            Controller(context.bot, update, user, cart, last_command).finish_order()
+
+        elif last_command.current_menu == constants.feedback:
+            Controller(context.bot, update, user, cart, last_command).feedback()
+
+        elif last_command.to_menu == constants.home:
+            Controller(context.bot, update, user, cart, last_command).home_control()
+
+        else:
+            context.bot.sendMessage(update.message.chat_id, text='???')
 
 
 def admin_control(update: Update, context: CallbackContext):
