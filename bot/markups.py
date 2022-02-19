@@ -20,7 +20,7 @@ def finish_order_markup(lang):
 
 register_markup = ReplyKeyboardMarkup([
     [KeyboardButton(text=constants.send_contact_menu, request_contact=True)]
-])
+], resize_keyboard=True)
 
 
 # create location_markup to handle location
