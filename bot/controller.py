@@ -157,7 +157,10 @@ class Controller:
     def language_select(self):
         if self.last_command.to_menu == constants.language and \
                 any(self.update.message.text in x for x in markups.languages):
-            self.user.language = self.update.message.text
+            if self.update.message.text == '🇷🇺':
+                self.user.language = 'ru'
+            else:
+                self.user.language = 'uz'
             self.user.save()
 
             text = constants.messages[self.get_lang()][constants.lang_select]
