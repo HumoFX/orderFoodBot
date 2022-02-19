@@ -22,6 +22,7 @@ back = 'back'
 # for menus
 make_order_menu = '🛒 Make order'
 cart_menu = '🛒 Cart'
+menu = 'menu'
 my_orders_menu = '🛍 My Orders'
 language_menu = '🇺🇿 🇷🇺'
 feedback_menu = '✍️ Feedback'
@@ -130,6 +131,7 @@ messages = {
         confirm_order: 'Tasdiqlayman',
         not_confirm_order: 'Tasdiqlamayman',
         location: 'Lokatsiya',
+        menu: 'Menu',
         final_order: """Сизнинг буюртмангиз {}
 {}  
 {}
@@ -184,7 +186,7 @@ messages = {
         card_payment: "На карту 💳",
         send_order: "Отправить заказ",
         card_for_payment: "Оплатите заказ с помощью приложения Payme или Click, переводя деньги на 8600 1402 8764 0982",
-
+        menu: 'Меню'
     },
 
 }
