@@ -12,7 +12,7 @@ class TelegramUser(models.Model):
     phone_number = models.CharField(max_length=16, null=True)
     step = models.PositiveSmallIntegerField(default=1)
     language = models.CharField(
-        max_length=64, choices=LANGUAGES, default=constants.UZ)
+        max_length=64, choices=LANGUAGES, default=constants.RU)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_registered = models.BooleanField(default=False)
 
