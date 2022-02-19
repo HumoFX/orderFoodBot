@@ -103,6 +103,7 @@ messages = {
     'uz': {
         welcome: 'Xush kelibsiz 🤗',
         empty_cart: "Savatchangiz bo'sh 😧",
+        choose_lang: "Tilni tanlang",
         lang_select: "Til o'zgardi ✅",
         feedback_succeed: "Fikr va mulohazalaringiz uchun rahmat 💭",
         feedback_send: "Quyida matn kiriting va jo\'nating",
@@ -143,6 +144,7 @@ messages = {
     'ru': {
         welcome: 'Добро пожаловать!',
         empty_cart: "Ваша корзина пуста",
+        choose_lang: "Выберите язык",
         lang_select: "Язык изменен",
         feedback_succeed: 'Спасибо за ваш отзыв!',
         feedback_send: "Введите текст ниже и отправьте.",
