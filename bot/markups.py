@@ -51,7 +51,7 @@ def home_markup(lang):
 
 
 languages = [
-    ["🇺🇿 O'zbekcha", "🇷🇺 Русский"]
+    ["🇺🇿", "🇷🇺"]
 ]
 languages_markup = ReplyKeyboardMarkup(languages, resize_keyboard=True)
 

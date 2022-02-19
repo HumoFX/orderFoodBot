@@ -1,6 +1,5 @@
 # for user language choices
 UZ = 'uz'
-EN = 'en'
 RU = 'ru'
 LANGUAGES = [
     (UZ, "O'zbekcha"),
