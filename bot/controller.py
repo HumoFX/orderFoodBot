@@ -38,16 +38,11 @@ class Controller:
         self.last_command = last_command
 
     def get_lang(self):
-        if self.user.language == markups.languages[0][1]:
-            return 'ru'
-        else:
-            return 'uz'
+        return self.user.language if self.user.language else 'ru'
 
     def start(self):
-        text = 'Welcome {}!\n'.format(
-            self.user.first_name if self.user.first_name else 'User')
         self.bot.sendMessage(self.update.message.chat_id,
-                             text=text,
+                             text=constants.messages[self.get_lang()][constants.welcome],
                              reply_markup=markups.home_markup(self.get_lang()))
         command_logging(user=self.user,
                         message_id=self.update.message.message_id,
