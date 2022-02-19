@@ -276,7 +276,7 @@ class Controller:
 
     def category_select(self):
         self.bot.sendMessage(self.update.message.chat_id,
-                             text=constants[self.get_lang()][constants.menu],
+                             text=constants.messages[self.get_lang()][constants.menu],
                              reply_markup=markups.categories_markup(self.get_lang()))
         command_logging(user=self.user,
                         message_id=self.update.message.message_id,
