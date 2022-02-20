@@ -10,12 +10,13 @@ def back_markup(lang):
     ], resize_keyboard=True)
 
 
-def finish_order_markup(lang):
+def finish_order_markup(lang, product_list):
     return ReplyKeyboardMarkup([
-        [constants.messages[lang][constants.clear_cart]],
+        # [constants.messages[lang][constants.clear_cart]],
         [constants.messages[lang][constants.proceed_to_order]],
+        *product_list,
         [constants.messages[lang][constants.back_menu]]
-    ], resize_keyboard=True)
+    ], resize_keyboard=True, width=1)
 
 
 register_markup = ReplyKeyboardMarkup([
@@ -85,10 +86,8 @@ def product_list(category_id, lang):
     return ReplyKeyboardMarkup([products[i:i + 2] for i in range(0, len(products), 2)])
 
 
-pieces = [str(x) for x in (range(1, 10))]
-
-
 def pieces_markup(lang):
+    pieces = [str(x) for x in (range(1, 10))]
     pieces.append(constants.messages[lang][constants.back_menu])
     return ReplyKeyboardMarkup(
         [pieces[i:i + 3] for i in range(0, len(pieces), 3)], resize_keyboard=True, width=3)
@@ -118,5 +117,7 @@ def order_status_inline_markup(lang, status, order_id):
             [InlineKeyboardButton(constants.messages[lang][constants.delivered], callback_data=f'{order_id}:4')],
         ]
     elif status == 4:
+        return None
+    elif status == 5:
         return None
     return InlineKeyboardMarkup(status_list)

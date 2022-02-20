@@ -66,7 +66,7 @@ def bot_control(update: Update, context: CallbackContext):
             Controller(context.bot, update, user, cart, last_command).cart_select()
 
         elif last_command.current_menu == constants.proceed_to_order:
-            Controller(context.bot, update, user, cart, last_command).location()
+            Controller(context.bot, update, user, cart, last_command).proceed_order()
 
         elif last_command.to_menu == constants.remove_from_cart:
             Controller(context.bot, update, user, cart, last_command).remove_from_cart()

@@ -81,7 +81,8 @@ send_order = 'Send order'
 send_order_message = 'Your order has been sent'
 order_done = 'Order done'
 order_done_message = 'Your order has been done'
-
+total_cart_price = '{}\n{}\nTotal cart price: {} uzs'
+no_products = 'No products'
 admin_text = {'2': 'Заказ принят ✅',
               '3': 'Заказ готов и отправлен 🚚',
               '4': 'Заказ выполнен ✅',
@@ -122,7 +123,7 @@ messages = {
         language_menu: '🇺🇿 🇷🇺',
         feedback_menu: '✍️ Taklif bildirish',
         back_menu: 'Orqaga',
-        proceed_to_order: 'Buyurtma berish',
+        proceed_to_order: 'Buyurtma berish 🚚',
         send_location: 'Lokatsiyani yuborish',
         finish_order_menu: 'Buyurtmani yakunlash',
         finished_message: 'Amalga oshirildi!',
@@ -142,6 +143,9 @@ messages = {
         card_payment: 'Karta 💳',
         send_order: 'Buyurtma yuborish',
         card_for_payment: 'Karta orqali to\'lov uchun 8600 1402 8764 0982 raqamiga Payme yoki Click ilova yordamida xaridni amalga oshirishing',
+        total_cart_price: '{}\n{}\nUmumiy to\'lov(yetkazib berishsiz): {} so\'m',
+        no_products: 'Bugunga o\'rnatilgan mahsulotlar yo\'q',
+        order_not_confirmed: 'Buyurtma tasdiqlanmadi',
     },
     'ru': {
         welcome: 'Добро пожаловать 🤗',
@@ -164,7 +168,7 @@ messages = {
         language_menu: '🇺🇿 🇷🇺',
         feedback_menu: '✍️ Обратная связь',
         back_menu: 'Назад',
-        proceed_to_order: 'Оформить заказ',
+        proceed_to_order: 'Оформить заказ 🚚',
         send_location: 'Отправить локацию',
         finish_order_menu: 'Завершить заказ',
         finished_message: 'Успешно!',
@@ -186,7 +190,10 @@ messages = {
         card_payment: "На карту 💳",
         send_order: "Отправить заказ",
         card_for_payment: "Оплатите заказ с помощью приложения Payme или Click, переводя деньги на 8600 1402 8764 0982",
-        menu: 'Меню'
+        menu: 'Меню',
+        total_cart_price: '{}\n{}\nОбщая сумма(без доставки): {} сум',
+        no_products: 'Нет продуктов на сегодня',
+        order_not_confirmed: "Заказ не подтвержден"
     },
 
 }

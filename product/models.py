@@ -19,9 +19,9 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=96, unique=True)
-    name_en = models.CharField(max_length=96, null=True, blank=True, unique=True)
-    name_ru = models.CharField(max_length=96, null=True, blank=True, unique=True)
+    name = models.CharField(max_length=96, null=True, blank=True)
+    name_en = models.CharField(max_length=96, null=True, blank=True)
+    name_ru = models.CharField(max_length=96, null=True, blank=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     available = models.BooleanField(default=True)
     photo = models.ImageField(upload_to='book/img/', null=True, blank=True)
@@ -44,10 +44,11 @@ class Product(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         super(Product, self).save()
+        print("update_fields", update_fields)
         chat_id = 996288857
         photo = {'photo': self.photo}
         token = DJANGO_TELEGRAMBOT['BOTS'][0]['TOKEN']
-        data = {'chat_id': chat_id}
+        data = {'chat_id': chat_id, 'caption': self.__str__()}
         url = f'https://api.telegram.org/bot{token}/sendPhoto'
         response = requests.post(url, data=data, files=photo)
         print(f"2 - {response.status_code}")
@@ -140,7 +141,13 @@ class CartItem(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return "{}x {}".format(self.quantity, self.product.name)
+        return "{}x {}".format(self.quantity, self.product.category.name_ru)
+
+    def representate(self, lang):
+        if lang == 'uz':
+            return f"{self.quantity}x {self.product.category.name}"
+        else:
+            return f"{self.quantity}x {self.product.category.name_ru}"
 
 
 class TelegramChat(models.Model):

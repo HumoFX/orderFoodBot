@@ -6,6 +6,7 @@ from bot.constants import LANGUAGES
 
 class TelegramUser(models.Model):
     telegram_id = models.PositiveIntegerField()
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     username = models.CharField(max_length=255, blank=True, null=True)
