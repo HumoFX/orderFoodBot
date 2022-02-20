@@ -354,7 +354,9 @@ class Controller:
         product = Product.objects.filter(query).last()
         if product:
             markup = markups.pieces_markup(self.get_lang())
-            text = f"*{product.name}*\n\n{product.description}\n{product.price} сум \n{product.active_date}"
+            text = constants.messages[self.get_lang()][constants.product_cart].format(product.name,
+                                                                                      product.description,
+                                                                                      product.price)
             new_message = self.bot.sendPhoto(chat_id=self.update.message.chat_id,
                                              photo=str(product.photo_id),
                                              caption=text, parse_mode='Markdown', reply_markup=markup)

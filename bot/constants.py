@@ -51,6 +51,7 @@ finished_message = 'Finished'
 proceed_to_order = 'Proceed to order'
 send_location = 'Send your location'
 checkout = 'Checkout'
+product_cart = 'Product'
 remove_from_cart = 'Remove from cart'
 confirm_order = 'Confirm'
 not_confirm_order = 'Not confirm'
@@ -146,7 +147,9 @@ messages = {
         total_cart_price: '{}\n{}\nUmumiy to\'lov(yetkazib berishsiz): {} so\'m',
         no_products: 'Bugunga o\'rnatilgan mahsulotlar yo\'q',
         order_not_confirmed: 'Buyurtma tasdiqlanmadi',
+        product_cart: "*{}*\n\n{}\n\n*Narxi: {} so\'m*",
     },
+
     'ru': {
         welcome: 'Добро пожаловать 🤗',
         empty_cart: "Ваша корзина пуста 😧",
@@ -193,7 +196,8 @@ messages = {
         menu: 'Меню',
         total_cart_price: '{}\n{}\nОбщая сумма(без доставки): {} сум',
         no_products: 'Нет продуктов на сегодня',
-        order_not_confirmed: "Заказ не подтвержден"
+        order_not_confirmed: "Заказ не подтвержден",
+        product_cart: "*{}*\n\n{}\n\n*Цена: {} сум*"
     },
 
 }
