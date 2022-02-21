@@ -1,6 +1,6 @@
 from django_telegrambot.apps import DjangoTelegramBot
 from telegram.ext import MessageHandler, Filters, CallbackContext, CallbackQueryHandler
-from telegram import Update, BotCommand
+from telegram import Update, BotCommand, Bot
 from bot import constants
 from bot.base_commands import register
 from bot.controller import Controller
@@ -123,10 +123,20 @@ def admin_control(update: Update, context: CallbackContext):
 
 
 def main():
-    commands = {
-        'start': 'Запуск 🚀',
+    langs_with_commands: Dict[str, Dict[str, str]] = {
+        'ru': {
+            'start': 'Перезапуск',
+        }
     }
-    DjangoTelegramBot.get_bot().setMyCommands(commands=[BotCommand(command, description) for command, description in commands.items()])
+    bot_instance = DjangoTelegramBot.get_bot()
+    for language_code in langs_with_commands:
+        bot_instance.setMyCommands(
+            commands=[
+                BotCommand(command, description) for command, description in langs_with_commands[language_code].items()
+            ]
+        )
+    # DjangoTelegramBot.get_bot().deleteMyCommands()
+    # DjangoTelegramBot.get_bot().setMyCommands(commands=[BotCommand(command, description) for command, description in commands.items()])
 
     dp = DjangoTelegramBot.dispatcher
     dp.add_handler(MessageHandler(Filters.all, bot_control))
