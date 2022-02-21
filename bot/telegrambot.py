@@ -123,9 +123,13 @@ def admin_control(update: Update, context: CallbackContext):
 
 
 def main():
+    commands = {
+        'start': 'Запуск 🚀',
+    }
+
     dp = DjangoTelegramBot.dispatcher
+    dp.get_bot().setMyCommands(commands=[BotCommand(command, description) for command, description in commands.items()])
     dp.add_handler(MessageHandler(Filters.all, bot_control))
 
     dp.add_handler(CallbackQueryHandler(admin_control))
-
     # dp.add_handler(MessageHandler(Filters.sticker, sticker))
