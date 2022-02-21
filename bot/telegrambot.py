@@ -126,9 +126,10 @@ def main():
     commands = {
         'start': 'Запуск 🚀',
     }
+    DjangoTelegramBot.get_bot().setMyCommands(commands=[BotCommand(command, description) for command, description in commands.items()])
+
     dp = DjangoTelegramBot.dispatcher
     dp.add_handler(MessageHandler(Filters.all, bot_control))
 
     dp.add_handler(CallbackQueryHandler(admin_control))
     # dp.add_handler(MessageHandler(Filters.sticker, sticker))
-    DjangoTelegramBot.get_bot().setMyCommands(commands=[BotCommand(command, description) for command, description in commands.items()])
