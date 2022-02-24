@@ -16,6 +16,7 @@ class TelegramUser(models.Model):
         max_length=64, choices=LANGUAGES, default=constants.RU)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_registered = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return '{}, {}, {}'.format(self.telegram_id, self.phone_number, self.first_name)

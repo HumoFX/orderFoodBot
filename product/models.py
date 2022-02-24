@@ -1,7 +1,12 @@
 import requests
+import json
 import datetime
 from django.db import models
+from django.db.models.signals import post_save, post_delete, pre_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
 from foodDelivery.local_settings import DJANGO_TELEGRAMBOT
+from bot.models import TelegramUser
 
 
 class Category(models.Model):
@@ -112,7 +117,7 @@ class Order(models.Model):
         """
         text_uz = f"""
         *Buyurtma №{self.id}*
-        Status: {self.get_status_display()}
+        Status: {self.get_status_display()}F
         Sana: {self.created.strftime('%Y-%m-%d %H:%M')}
         Telefon: {self.user.phone_number}
         {cart_text}
@@ -196,3 +201,64 @@ class Text(models.Model):
 
     def __str__(self):
         return self.text_ru
+
+
+# create Broadcast model
+class Broadcast(models.Model):
+    photo = models.ImageField(upload_to='broadcast/', null=True, blank=True, verbose_name='Фото')
+    photo_id = models.CharField(max_length=128, null=True, blank=True, verbose_name='Фото id')
+    text = models.TextField( null=True, blank=True, verbose_name='Текст')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.text
+
+
+# method for updating
+@receiver(post_save, sender=Broadcast)
+def update_stock(sender, instance, *args, **kwargs):
+    if instance.photo:
+        print(instance.photo)
+        print(TelegramUser.objects.filter(user__is_superuser=True).first())
+        chat_id = TelegramUser.objects.filter(user__is_superuser=True).first().telegram_id
+        photo = {'photo': instance.photo}
+        token = DJANGO_TELEGRAMBOT['BOTS'][0]['TOKEN']
+        markup = {"inline_keyboard": [
+            [
+                {
+                    "text": "Опубликовать",
+                    "callback_data": f"broad:{instance.id}:1"
+                },
+                {
+                    "text": "Отменить",
+                    "callback_data": f"broad:{instance.id}:2"
+                }
+
+            ]
+        ]}
+        markup = json.dumps(markup)
+        data = {'chat_id': chat_id, 'caption': instance.__str__(), 'parse_mode': 'Markdown', 'reply_markup': markup}
+        url = f'https://api.telegram.org/bot{token}/sendPhoto'
+        response = requests.post(url, data=data, files=photo)
+        print(response.json())
+        print(f"2 - {response.status_code}")
+        if response.status_code != 200:
+            pass
+        else:
+            instance.photo_id = response.json()['result']['photo'][0]['file_id']
+            instance.save()
+
+
+# create Broadcast receiver model
+class BroadcastReceiver(models.Model):
+    broadcast = models.ForeignKey(Broadcast, on_delete=models.CASCADE, related_name='broadcast_reciever')
+    message_id = models.CharField(max_length=128, null=True, blank=True)
+    user = models.ForeignKey('bot.TelegramUser', on_delete=models.CASCADE, related_name='broadcast_reciever')
+    received = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.user.__str__()

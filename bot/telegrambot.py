@@ -34,6 +34,8 @@ def bot_control(update: Update, context: CallbackContext):
         register(context.bot, user, update)
     else:
         if update.message.text == '/start':
+            user.is_active = True
+            user.save()
             Controller(context.bot, update, user).start()
 
         try:
@@ -118,6 +120,10 @@ def admin_control(update: Update, context: CallbackContext):
         user.last_name = update.message.from_user.last_name
         user.username = update.message.from_user.username
         user.save()
+
+    action = update.callback_query.data.split(':')[0]
+    if action == 'broad':
+        return Controller(context.bot, update, user).broadcast()
     if update.callback_query:
         return Controller(context.bot, update, user).change_status()
 

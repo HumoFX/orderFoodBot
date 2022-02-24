@@ -121,3 +121,12 @@ def order_status_inline_markup(lang, status, order_id):
     elif status == 5:
         return None
     return InlineKeyboardMarkup(status_list)
+
+
+# create broadcast inline keyboard for admin
+def broadcast_inline_markup(broadcast_id):
+    status_list = [
+        [InlineKeyboardButton('Опубликовать', callback_data=f'{broadcast_id}:2'),
+         InlineKeyboardButton('Удалить', callback_data=f'{broadcast_id}:3')],
+    ]
+    return InlineKeyboardMarkup(status_list)

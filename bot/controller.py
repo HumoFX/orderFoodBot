@@ -1,5 +1,6 @@
 import json
 import textwrap
+from time import sleep
 from django.db.models import Sum, F, Q
 import datetime
 from bot import markups, constants
@@ -537,3 +538,40 @@ class Controller:
         self.bot.sendMessage(chat_id=order.user.telegram_id,
                              text=user_text,
                              parse_mode='Markdown')
+
+    def broadcast(self):
+        from product.models import Broadcast, TelegramUser, BroadcastReceiver
+        broadcast_info = self.update.callback_query.data.split(':')
+        print(broadcast_info)
+        broadcast = Broadcast.objects.get(id=int(broadcast_info[1]))
+        if broadcast_info[2] == '1':
+            self.bot.answerCallbackQuery(callback_query_id=self.update.callback_query.id,
+                                         text="Рассылка началось",
+                                         show_alert=True)
+            self.bot.editMessageReplyMarkup(chat_id=self.update.callback_query.message.chat_id,
+                                            message_id=self.update.callback_query.message.message_id,
+                                            reply_markup=None)
+            for receiver in TelegramUser.objects.all():
+                try:
+                    message = self.bot.sendPhoto(photo=broadcast.photo_id,
+                                                 chat_id=receiver.telegram_id,
+                                                 caption=broadcast.text,
+                                                 parse_mode='Markdown')
+                    BroadcastReceiver.objects.create(broadcast=broadcast, user=receiver, received=True,
+                                                     message_id=message.message_id)
+                except Exception as e:
+                    receiver.is_active = False
+                    receiver.save()
+                sleep(0.033)
+
+            self.bot.sendMessage(chat_id=self.update.callback_query.message.chat_id,
+                                 text='Рассылка завершена',
+                                 parse_mode='Markdown')
+        else:
+            self.bot.answerCallbackQuery(callback_query_id=self.update.callback_query.id,
+                                         text="Отменена",
+                                         show_alert=True)
+            self.bot.editMessageReplyMarkup(chat_id=self.update.callback_query.message.chat_id,
+                                            message_id=self.update.callback_query.message.message_id,
+                                            reply_markup=None)
+            # remove reply_markup
