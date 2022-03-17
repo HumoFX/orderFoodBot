@@ -301,11 +301,11 @@ class Controller:
                         to_menu=constants.product)
 
         try:
-            product = Product.objects.get(
+            product = Product.objects.filter(
                 Q(name=self.last_command.text) |
                 Q(name_en=self.last_command.text) |
                 Q(name_ru=self.last_command.text)
-            )
+            ).last()
         except Product.DoesNotExist:
             product = None
             return self.bot.sendMessage(self.update.message.chat_id,
