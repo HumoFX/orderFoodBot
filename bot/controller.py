@@ -343,16 +343,36 @@ class Controller:
                         text=self.update.message.text,
                         from_menu=constants.home,
                         current_menu=constants.category,
-                        to_menu=constants.product)
+                        to_menu=constants.product_list)
+
+    def product_category_select(self):
+        category = Category.objects.filter(
+            Q(name=self.update.message.text) |
+            Q(name_ru=self.update.message.text)
+        ).last()
+        # query = Q(category_id=category.id, available=True)
+        # products = Product.objects.filter(query)
+        text = constants.messages[self.get_lang()][constants.select_product]
+        new_message = self.bot.sendMessage(chat_id=self.update.message.chat_id,
+                                           text=text, parse_mode='Markdown',
+                                           reply_markup=markups.product_list(category.id, self.get_lang()))
+        command_logging(user=self.user,
+                        message_id=new_message.message_id,
+                        text=category.name,
+                        from_menu=constants.category,
+                        current_menu=constants.product_list,
+                        to_menu=constants.product,
+                        category_id=category.id)
 
     def product_select(self):
-        category = Category.objects.get(
+        product = Product.objects.filter(
             Q(name=self.update.message.text) |
             Q(name_en=self.update.message.text) |
-            Q(name_ru=self.update.message.text)
-        )
-        query = Q(category_id=category.id, active_date=datetime.date.today())
-        product = Product.objects.filter(query).last()
+            Q(name_ru=self.update.message.text),
+            available=True
+        ).last()
+        # query = Q(category_id=category.id, active_date=datetime.date.today())
+        # product = Product.objects.filter(query).last()
         if product:
             markup = markups.pieces_markup(self.get_lang())
             text = constants.messages[self.get_lang()][constants.product_cart].format(product.name,
@@ -364,10 +384,10 @@ class Controller:
             command_logging(user=self.user,
                             message_id=new_message.message_id,
                             text=product.name,
-                            from_menu=constants.category,
+                            from_menu=constants.product_list,
                             current_menu=constants.product,
                             to_menu=constants.add_to_cart,
-                            category_id=category.id)
+                            category_id=product.category_id)
 
 
         else:
@@ -382,7 +402,7 @@ class Controller:
                             from_menu=constants.category,
                             current_menu=constants.product,
                             to_menu=constants.product,
-                            category_id=category.id)
+                            category_id=product.category_id)
 
     def pieces_select(self):
         self.bot.sendMessage(self.update.message.chat_id,

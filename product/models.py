@@ -146,13 +146,13 @@ class CartItem(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return "{}x {}".format(self.quantity, self.product.category.name_ru)
+        return "{}x {}".format(self.quantity, self.product.name_ru)
 
     def representate(self, lang):
         if lang == 'uz':
-            return f"{self.quantity}x {self.product.category.name}"
+            return f"{self.quantity}x {self.product.name}"
         else:
-            return f"{self.quantity}x {self.product.category.name_ru}"
+            return f"{self.quantity}x {self.product.name_ru}"
 
 
 class TelegramChat(models.Model):

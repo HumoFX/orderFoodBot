@@ -10,6 +10,7 @@ LANGUAGES = [
 register = 'register'
 home = 'home'
 category = 'category'
+product_list = 'product_list'
 product = 'product'
 language = 'language'
 feedback = 'feedback'
@@ -101,6 +102,7 @@ user_status = {
     '5_uz': 'Buyurtma bekor qilindi ❌'
 
 }
+select_product = 'Select product'
 
 messages = {
     'uz': {
@@ -148,6 +150,7 @@ messages = {
         no_products: 'Bugunga o\'rnatilgan mahsulotlar yo\'q',
         order_not_confirmed: 'Buyurtma tasdiqlanmadi',
         product_cart: "*{}*\n\n{}\n\n*Narxi: {} so\'m*",
+        select_product: 'Mahsulotni tanlang',
     },
 
     'ru': {
@@ -197,7 +200,8 @@ messages = {
         total_cart_price: '{}\n{}\nОбщая сумма(без доставки): {} сум',
         no_products: 'Нет продуктов на сегодня',
         order_not_confirmed: "Заказ не подтвержден",
-        product_cart: "*{}*\n\n{}\n\n*Цена: {} сум*"
+        product_cart: "*{}*\n\n{}\n\n*Цена: {} сум*",
+        select_product: "Выберите продукт"
     },
 
 }

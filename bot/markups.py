@@ -75,15 +75,15 @@ def categories_markup(lang):
 def product_list(category_id, lang):
     if lang == 'en':
         products = list(Product.objects.filter(
-            category_id=category_id).values_list('name_en', flat=True))
+            category_id=category_id, available=True).values_list('name_en', flat=True))
     elif lang == 'ru':
         products = list(Product.objects.filter(
-            category_id=category_id).values_list('name_ru', flat=True))
+            category_id=category_id, available=True).values_list('name_ru', flat=True))
     else:
         products = list(Product.objects.filter(
-            category_id=category_id).values_list('name', flat=True))
+            category_id=category_id, available=True).values_list('name', flat=True))
     products.append(constants.messages[lang][constants.back_menu])
-    return ReplyKeyboardMarkup([products[i:i + 2] for i in range(0, len(products), 2)])
+    return ReplyKeyboardMarkup([products[i:i + 2] for i in range(0, len(products), 2)], resize_keyboard=True)
 
 
 def pieces_markup(lang):
@@ -130,3 +130,9 @@ def broadcast_inline_markup(broadcast_id):
          InlineKeyboardButton('Удалить', callback_data=f'{broadcast_id}:3')],
     ]
     return InlineKeyboardMarkup(status_list)
+
+
+def products_markup(product_list, lang):
+    products = [[product_list[i:i + 2] for i in range(0, len(product_list), 2)],
+                [constants.messages[lang][constants.back_menu]]]
+    return ReplyKeyboardMarkup(products, resize_keyboard=True, width=2)

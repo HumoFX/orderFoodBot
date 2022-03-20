@@ -55,6 +55,9 @@ def bot_control(update: Update, context: CallbackContext):
         elif last_command.to_menu == constants.category:
             Controller(context.bot, update, user, cart, last_command).category_select()
 
+        elif last_command.to_menu == constants.product_list:
+            Controller(context.bot, update, user, cart, last_command).product_category_select()
+
         elif last_command.to_menu == constants.product:
             Controller(context.bot, update, user, cart, last_command).product_select()
 
