@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from foodDelivery.local_settings import DJANGO_TELEGRAMBOT
 from bot.models import TelegramUser
+import textwrap
 
 
 class Category(models.Model):
@@ -125,6 +126,8 @@ class Order(models.Model):
         
         *Narxi: {self.cart.all().aggregate(models.Sum('price'))['price__sum']} sum*
         """
+        text_ru = textwrap.dedent(text_ru)
+        text_uz = textwrap.dedent(text_uz)
         return {"text_ru": text_ru, "text_uz": text_uz}
 
     # def order_date(self):
