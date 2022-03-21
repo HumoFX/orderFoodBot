@@ -20,7 +20,7 @@ DJANGO_TELEGRAMBOT = {
 
     'BOTS': [
         {
-            'TOKEN': '5295671145:AAGHAOquRyNNRrsVkq7vliqJ-T1PMrweMz0',  # Your bot token.
+            'TOKEN': '5196674511:AAFGP7myVIGT6z84rrA7G8qJicr-tlhYVUQ',  # Your bot token.
             # 'ALLOWED_UPDATES':(Optional[list[str]]), # List the types of
             # updates you want your bot to receive. For example, specify
             # ``["message", "edited_channel_post", "callback_query"]`` to
